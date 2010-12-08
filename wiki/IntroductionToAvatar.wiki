@@ -34,7 +34,7 @@ Avatar - 淘宝阿凡达 基于软件包的应用服务克隆系统
 
 ==软件包与软件仓库==
 
-我们目前使用的是RPM软件包，用yum作为软件包分发服务器 软件包信息可以在 http://yum.corp.taobao.com 上查询
+我们目前使用的是RPM软件包，用yum作为软件包分发服务器 软件包信息可以在用户所建yum server上查询
 
 ==命名空间(namespace)说明==
 
@@ -99,67 +99,6 @@ RedHat系统上安装软件包数量庞大，我们利用RPM的Group已有命名
 格式为：文件名 换行 diff内容 换行 下一个文件名 换行 内容 …… 例：
 
  /home/a/share/ECPM/Merge/conf/merge.conf.diff
-
-
-
-[[File:Avatar_-_Transation_Format_-_2010-08-23.png]]
-
-== 软件包还原/安装程序 WallE==
-
-===安装方法===
-
-yum install walle -b current
-
-===使用方法===
-
-Wall-E:I am a Avatar Installer @Taobao Inc.
-Usage:
-    walle.sh [-n] [-r] ..[options]
-
-        -n              use namespace ''使用名为namespace的Avatar信息''
-        -r              use revision ''使用指定版本''
-        -k              skip base rpm check.''跳过系统基础包检测和系统包处理 在已知系统软件健全时使用 会节省安装时间''
-        -N              don't patch specified diff files
-        -f              use local avatar file. ''使用本地文件作为Avatar信息''
-        -c              print summary report only, not perform install.''只生成报告 不执行安装''
-        -y              skip perform confirm prompt.''跳过执行提示交互，直接执行''
-        -H              show Wall-E performed history.''显示Wall-E执行历史''
-        -h              print this help message.''显示帮助信息''
-        -v              verbose output.''调试模式''
-        -V              print version.''显示版本信息''
-        -t              Ask no questions to patch command; skip bad-Prereq patches; assume reversed 跳过patch的已patch提问，直接patch
-
-
-一个部署/安装/回滚的显示过程： 
-
-== 软件包状态捕获程序 Avatar==
-
-===安装方法===
-
-yum install avatar -b current
-
-===使用方法===
-
- Avatar - Avatar Fetcher, Taobao Inc.
- Usage:
-    avatar.pl [options]
- Options:
-     -h/--help                           Help 显示帮助信息
-     -v/--verbose                Run commands in verbose mode 调试模式，显示更多信息
-     -c/--cust                           divsion customer packages 指定自定义包
-     -n/--namespace      use specified namespace 指定命名空间
-     -s/--save                           save avatar to <namespace>.avatar 保存状态信息至文件
-     -f/--file                           use exist avatar file instead fetch snap 使用已有状态信息文件提交
-
-一个捕获并提交的显示过程：
-
- ./avatar.pl -n item[1-100].cm4 <-指定namespace而不是本机主机名
- Enter your svn account: buping <-svn帐号
- Enter your svn password: <-svn密码
- Enter Avatar Commit Comment (> 20 letters): taobao avatar test taobao avatar test taobao avatar test <-svn提交说明
- INFO:Fetching Avatar...
- INFO:Commiting...
- MESSAGE:Avatar commited successfuly <-成功提交提示
 
 ==阿凡达信息的继承功能==
 
