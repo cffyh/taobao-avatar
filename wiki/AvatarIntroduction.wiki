@@ -22,39 +22,6 @@ Avatar - 淘宝阿凡达 基于软件包的应用服务克隆系统
 ###软件包快照抓取方式CLI和WEB
 ###可通过CLI或WEB提交软件包快照文件
 
-==与yinst/igor组合的比较==
-
-
-
-
-
-{| class="wikitable" border="1"
-|-
-!  比较条目
-!  RPM/Avatar
-!  yinst/Igor
-|-
-|  操作系统
-|  RedHat Linux
-|  FreeBSD/any Linux
-|-
-|  包管理器
-|  RedHat Package Manager
-|  yinst
-|-
-|  被管理的系统文件
-|  /所有文件
-|  /home/y下的文件
-|-
-|  类库路径
-|  系统lib
-|  /home/y/lib
-|-
-|  状态文件
-|  单一文本 namespace.avatar
-|  单一文本 yinst.state
-|}
-
 ==系统架构图==
 
 [[File:AvatarSystemStructure.png]]
