@@ -27,6 +27,7 @@ Avatar - 淘宝阿凡达 基于软件包的应用服务克隆系统
 
 ==系统架构图==
 
+http://taobao-avatar.googlecode.com/files/SystemStructure.png
 
 ==用户/系统流程图==
 
