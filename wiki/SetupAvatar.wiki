@@ -1,0 +1,5 @@
+= 如何构建阿凡达系统 =
+
+构建yum server
+
+构建yum server的web服务
