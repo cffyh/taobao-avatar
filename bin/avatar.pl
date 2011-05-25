@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
-# $Id
-# $HeadURL
+# $Id$
+# $HeadURL$
+
 use Data::Dumper;
 use MIME::Base64;
 use LWP::Simple;
@@ -79,10 +80,20 @@ close(MAIL);
 }
  
 sub getRPM_URL {
-	($name) = @_;
-	$res = `curl -s 'http://your_yum_server/cgi-bin/rpmfind?name="$name".rpm'`;
-	if ($res =~ m/Download: <a href='(.*)?'.*/) {
-		return $1;
+	($p,$name,$version,$arch,$release) = @_;
+	$p = $name."-".$version."-".$release.".".$arch.".rpm";
+	$rhel = `rpm -q redhat-release --qf "%{v}"`;
+	if ( -e "/usr/bin/curl" ){
+		$opt_verbose && debug("curl -s 'http://package.server.taobao.com/cgi-bin/rpmfind?name=$p&rhel=$rhel");
+		$res = `curl -s 'http://package.server.taobao.com/cgi-bin/rpmfind?name=$p&rhel=$rhel'`;
+	}elsif ( -e "/usr/bin/wget" ){
+		$res = `wget -q 'http://package.server.taobao.com/cgi-bin/rpmfind?name=$p&rhel=$rhel' -O /dev/stdout`;
+	}else{
+		error "Neither curl or wget on this host, can not location rpm package, please install one. program exit";
+		exit 1;
+	}
+	if ($res) {
+		return $res;
 	}
 
 }
@@ -92,7 +103,7 @@ sub postAvatar {
   $ua->agent("Avatar/0.1");
 
   # Create a request
-  my $req = HTTP::Request->new(POST => 'http://avatar.yourdomain.net:9999/PostAvatar.php');
+  my $req = HTTP::Request->new(POST => 'http://avatar.tbsite.net:9999/PostAvatar.php');
   $req->content_type('application/x-www-form-urlencoded');
   $req->authorization_basic( $username, $password );
   $req->content("@_");
@@ -139,14 +150,14 @@ if ( $opt_cust ){
 }
 
 if (! $opt_save){
-	print "Enter your svn account: ";
+	print "Enter your svn  account: ";
 	chomp($username = <>);
 	system("stty -echo");
 	print "Enter your svn password: ";
 	chomp($password = <>);
 	system("stty echo");
 	print "\n";
-	print "Enter Avatar Commit Comment (> 20 letters): ";
+	print "Enter Avatar Commit Comment (> 5 letters): ";
 	chomp($comment = <>);
 	$comment =~ s/ /\ /ig;
 }
@@ -279,8 +290,8 @@ for (@cust_rpms) {
 		#print $1."\n";
 		my $changed_file = $1;
 		my $stage_file = "/".$changed_file;
-		my $file_type = `file -b $stage_file`;
-		if($file_type =~ /text/){
+		my $conf_files = `rpm -qc $rpm`;
+		if(grep (/$changed_file/i,$conf_files)){
 		my $extract_file = './'.$changed_file;
 		my $rpm_file = $tmpdir."/".$changed_file;
 		$p = `rpm -q $rpm`;
@@ -289,30 +300,35 @@ for (@cust_rpms) {
 		$arch = `rpm -q --qf %{ARCH} $rpm`;
 		$release = `rpm -q --qf %{R} $rpm`;
 		$opt_verbose && debug( $p." ".$name." ".$version." ".$arch." ".$release);
-		$p_url = getRPM_URL($name."-".$version."-".$release."$arch);
-		$opt_verbose && debug( $p_url );
-		$p_url =~ m/.*\/(.*)/;
-		$ori_package = $1;
-		if ( ! -e $tmpdir."/".$ori_package ){
-			`cd $tmpdir; wget $p_url -q -O $tmpdir/$ori_package`;
-			$opt_verbose && debug("wget $p_url -q -O $tmpdir/$ori_package");
+		$p_url = getRPM_URL($p,$name,$version,$arch,$release);
+		$p_url =~ s/\n//ig;		
+		$opt_verbose && debug( $p_url );		
+		if (!$p_url){
+			warning "$p not exists on yum server, please check.";
 		}else{
-			$opt_verbose && debug("$ori_package exists, skip downloading...");
-		}
-		$opt_verbose && debug("cd $tmpdir; rpm2cpio $tmpdir/$ori_package |cpio -id $extract_file 2>/dev/null");
-		`cd $tmpdir; rpm2cpio $tmpdir/$ori_package |cpio -id $extract_file 2>/dev/null`;
+			$p_url =~ m/.*\/(.*)/;
+			$ori_package = $1;
+			if ( ! -e $tmpdir."/".$ori_package ){
+				`cd $tmpdir; wget -q $p_url -O $tmpdir/$ori_package`;
+				$opt_verbose && debug("wget -q $p_url -O $tmpdir/$ori_package");
+			}else{
+				$opt_verbose && debug("$ori_package exists, skip downloading...");
+			}
+			$opt_verbose && debug("cd $tmpdir; rpm2cpio $tmpdir/$ori_package |cpio -id $extract_file 2>/dev/null");
+			`cd $tmpdir; rpm2cpio $tmpdir/$ori_package |cpio -id $extract_file 2>/dev/null`;
 
-		
-		$diff = `diff -u $rpm_file $stage_file`;
-		$opt_verbose && debug("diff -u $rpm_file $stage_file");
-		$encoded = encode_base64($stage_file);
-		chomp($encoded);
-		$diff_file = $tmpdir."/".$encoded.".diff";
-		$diff_files .= $stage_file.".diff ";
-		$encoded_diff_files .= $diff_file." ";
-		open( FP, "> $diff_file" );
-		print FP $diff;
-		close FP;
+			
+			$diff = `diff -u $rpm_file $stage_file`;
+			$opt_verbose && debug("diff -u $rpm_file $stage_file");
+			$encoded = encode_base64($stage_file);
+			chomp($encoded);
+			$diff_file = $tmpdir."/".$encoded.".diff";
+			$diff_files .= $stage_file.".diff ";
+			$encoded_diff_files .= $diff_file." ";
+			open( FP, "> $diff_file" );
+			print FP $diff;
+			close FP;
+			}
 		}
 	}
 	}
