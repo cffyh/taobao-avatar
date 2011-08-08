@@ -1,0 +1,32 @@
+#!/usr/bin/env python
+# rpmfind, the cgi program to find rpm file by full-name and generate location url
+import os,cgi,re,sys
+
+server_path = "/home/yum/"
+
+print "Content-Type: text/plain\n"
+form = cgi.FieldStorage()
+
+## add a form.getvalue for each of the names in your form: ##
+rpm = form.getvalue("name").replace(" ","+")
+RHEL_VER = form.getvalue("rhel")
+if RHEL_VER == "":
+	RHEL_VER = "5Server"
+
+if RHEL_VER == "6Server":
+	result = os.popen("find /home/yum/ -name " + rpm + "|grep -v -E 'dailybuild'|grep -E 'taobao/6|rhel/6|ops/6'").readlines()
+elif RHEL_VER == "5Server":
+	result = os.popen("find /home/yum/ -name " + rpm + "|grep -v -E 'dailybuild'|grep -E 'taobao/5|rhel/5|ops/5'").readlines()
+elif RHEL_VER == "4AS":
+	result = os.popen("find /home/yum/ -name " + rpm + "|grep -v -E 'dailybuild'|grep -E 'taobao/4|rhel/4|ops/4'").readlines()
+else:
+	result = os.popen("find /home/yum/ -name " + rpm + "|grep -v -E 'dailybuild'").readlines()
+#print drink
+
+
+for a in result:
+	basename = os.popen("basename "+a).readline().replace("\n","").replace(server_path,"")
+	dirname = os.popen("dirname "+a).readline().replace("\n","").replace(server_path,"")
+	print "http://yum.corp.taobao.com/" + dirname + "/" + basename
+	sys.exit(0) ## Only return one result, if have many, manage the repo
+
