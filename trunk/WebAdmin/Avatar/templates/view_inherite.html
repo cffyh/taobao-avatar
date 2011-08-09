@@ -1,0 +1,50 @@
+{% extends "index_base.html" %}
+{% block content %}
+{%load enconvertch %}
+<div class="content">
+  <div class="edit-avatar">
+  <form action="/avatar/view_inheritance/saveview/" method="post">
+    <table border="0" align="center" cellpadding="2" cellspacing="2" class="main_table">
+      <tr>
+        <th colspan="3" scope="col">
+        快照名称:<input type="text" id="new_file_name" value="{{filename}}" name="new_file_name"  size="60">
+        <input type="hidden" id="parentfileid" name="parentfileid" value="{{parentfileid}}">
+          </th>
+        </tr>
+     
+      <tr>
+        <td>操作系统软件包 Base RPMS<br> 
+        <textarea name="base_rpms" id="base_rpms" cols="45" rows="5">{{base_rpms}}</textarea>
+		</td>
+        <td></td>
+          <td>
+          自定义应用软件包 Cust RPMS<br> 
+         <textarea name="cust_rpms" id="cust_rpms" cols="45" rows="5">{{cust_rpms}}</textarea>
+		 </td>
+      </tr>
+      <tr>
+        <td colspan="3"><label>Diff文件
+            <input type="text" name="diff_files" id="diff_files" size="70" value="{{diff_files}}" />
+        </label></td>
+      </tr>
+      <tr>
+        <td colspan="3">Diff文件内容
+          <textarea name="diff_content" id="diff_content" cols="75" rows="6">{{diff_content}}</textarea>
+        </td>
+        </tr>
+        <tr>
+        <td colspan="3">svn提交说明
+        <input type="text" id="memo"  name="memo"  size="80">
+        </td>
+        </tr>
+      
+       <tr>
+        <td colspan="3" style="text-algin:center">
+          <input type="submit" value="提交">
+          </td>
+        </tr>
+    </table>
+    </form>
+  </div>
+ </div>
+{%endblock%}

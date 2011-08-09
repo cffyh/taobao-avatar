@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">	
+		<title>淘宝阿凡达克隆系统</title>
+		<style type="text/css">
+			body {
+				background: #354E61;
+				font-family: 'Arial', sans-serif;
+				font-size: small;
+				color: #999;
+			}
+			.wrapper {
+				width: 560px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			.header {
+				padding: 10px 15px 15px;
+			}
+			.content {
+				padding: 15px;
+			}
+			hr {
+				margin: 15px 0 0;
+				border: none;
+				border-top: dotted 1px #B9B9B9;
+			}
+			a {
+				color: #058EC4;
+				text-decoration: none;
+			}
+			a:hover {
+				text-decoration: underline;
+			}
+			h1 a {
+				display: block;
+				width: 183px;
+				height: 53px;
+				margin: 0 auto;
+			}
+			h1 a span {
+				display: none;
+			}
+			h2 {
+	margin: 0;
+	font-size: 1.9em;
+	color: #333;
+	text-align: left;
+			}
+			h3 {
+				margin: 5px 0 0;
+				font-size: 1em;
+				color: #999;
+			}
+			p {
+				margin: 20px 0 5px;
+				font-size: 1.1em;
+			}
+			p a {
+				margin: 0 5px;
+			}
+			.box {
+				position: relative;
+				background: #FFF;
+			}
+			.corner {
+				position: absolute;
+				width: 50%;
+				height: 5px;
+				background: url(/site_media/images/corners-white.png) no-repeat;
+			}
+			.corner.tl {
+				top: -5px;
+				left: 0;
+				background-position: left top;
+			}
+			.corner.tr {
+				top: -5px;
+				right: 0;
+				background-position: right top;
+			}
+			.corner.bl {
+				bottom: -5px;
+				left: 0;
+				background-position: left bottom;
+			}
+			.corner.br {
+				bottom: -5px;
+				right: 0;
+				background-position: right bottom;
+			}
+			.picture {
+				width: 530px;
+				height: 244px;
+				margin: 0 auto;
+				background: url(/site_media/images/kate.jpg) no-repeat;
+			}
+.orange {
+	color: #fef4e9;
+	height:22px;
+	width:90px;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a), to(#f47a20));
+	background: -moz-linear-gradient(top,  #faa51a,  #f47a20);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+}
+.orange:hover {
+	height:22px;
+	width:90px;	
+	background: #f47c20;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f88e11), to(#f06015));
+	background: -moz-linear-gradient(top,  #f88e11,  #f06015);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+}
+.orange:active {
+	height:22px;
+	width:90px;	
+	color: #fcd3a5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20), to(#faa51a));
+	background: -moz-linear-gradient(top,  #f47a20,  #faa51a);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+}			
+		</style>
+	</head>
+	<body id="aeaoofnhgocdbnbeljkmbjdmhbcokfdb-mousedown">
+    <div style="position: absolute; top: 40px;left:60%; z-index:3"><a href="http://code.google.com/p/taobao-avatar"><img src="/site_media/images/logo.png" alt="logo" border="0"></a></div>
+		<div class="wrapper">
+			<h1><a href="http://brightkite.com/"><span>Single Sign On</span></a></h1>
+			<div class="box">
+				<div class="corner tl"></div>
+				<div class="corner tr"></div>
+				<div class="header">
+					<h2 id=""><img src="/site_media/images/avatar_logo.png" alt="logo" width="192" height="78"></h2>
+			  </div>
+				<div class="content" id="">
+				<form id="registerform" name="registerform" method="POST" action="/login/logincofirm/" onsubmit="return checksub()">
+			    <div class="picture" id=""></div>
+					<hr>
+                    <p>用户名：<input id="username" name="username"  autofocus/> 
+                    	密码：<input type="password" id="password" name="password" /> 
+                    	<input type="submit" class="orange" value="登录">
+                   </p>
+					<h4>请使用域帐和域密码进行登录</h4>
+				</div>
+				</form>
+				<div class="corner bl"></div>
+				<div class="corner br" id=""></div>
+			</div>
+		</div>
+	
+
+</body></html>
+<script>
+//<![CDATA[
+<!--
+function checksub(){
+	if(document.getElementById("username").value==""){
+		alert("花名不能为空！");
+		return false;
+	}
+	if(document.getElementById("password").value==""){
+		alert("密码不能为空！");
+		return false;
+	}
+}
+//-->
+//]]>
+</script>
+

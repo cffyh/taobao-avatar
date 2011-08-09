@@ -1,0 +1,144 @@
+{% extends "index_base.html" %}
+{% block content %}
+<script type="text/javascript" src="/site_media/js/thickbox.js"></script>
+<link rel="stylesheet" href="/site_media/css/thickbox.css">
+  <div class="content">
+  	
+  	<form action="/avatar/slotlist/filtefile/" method="get">
+  	<table width="95%" border="1" align="center" cellpadding="2" cellspacing="2" class="main_table" style="border=1;margin-left:40px;">
+      <tr >
+        <td colspan="7">
+        选择文件目录
+        <select name="filetype">
+        <option  {%ifequal filetype '' %} selected {%endifequal %} value="">----</option>
+        	<option  {%ifequal filetype 'a' %} selected {%endifequal %} value="a">a</option>
+        	<option {%ifequal filetype 'b' %} selected {%endifequal %}  value="b">b</option>
+        	<option  {%ifequal filetype 'c' %} selected {%endifequal %} value="c">c</option>
+        	<option {%ifequal filetype 'd' %} selected {%endifequal %}  value="d">d</option>
+        	<option  {%ifequal filetype 'e' %} selected {%endifequal %} value="e">e</option>
+        	<option {%ifequal filetype 'f' %} selected {%endifequal %}  value="f">f</option>
+        	<option  {%ifequal filetype 'g' %} selected {%endifequal %} value="g">g</option>
+        	<option {%ifequal filetype 'h' %} selected {%endifequal %}  value="h">h</option>
+        	<option  {%ifequal filetype 'i' %} selected {%endifequal %} value="i">i</option>
+        	<option {%ifequal filetype 'j' %} selected {%endifequal %}  value="j">j</option>
+        	<option  {%ifequal filetype 'k' %} selected {%endifequal %} value="k">k</option>
+        	<option {%ifequal filetype 'l' %} selected {%endifequal %}  value="l">l</option>
+        	<option  {%ifequal filetype 'm' %} selected {%endifequal %} value="m">m</option>
+        	<option {%ifequal filetype 'n' %} selected {%endifequal %}  value="n">n</option>
+        	<option  {%ifequal filetype 'o' %} selected {%endifequal %} value="o">o</option>
+        	<option {%ifequal filetype 'p' %} selected {%endifequal %}  value="p">p</option>
+        	<option  {%ifequal filetype 'q' %} selected {%endifequal %} value="q">q</option>
+        	<option {%ifequal filetype 'r' %} selected {%endifequal %}  value="r">r</option>
+        	<option {%ifequal filetype 's' %} selected {%endifequal %}  value="s">s</option>
+        	<option {%ifequal filetype 't' %} selected {%endifequal %}  value="t">t</option>
+        	<option {%ifequal filetype 'u' %} selected {%endifequal %}  value="u">u</option>
+        	<option {%ifequal filetype 'v' %} selected {%endifequal %}  value="v">v</option>
+        	<option {%ifequal filetype 'w' %} selected {%endifequal %}  value="w">w</option>
+        	<option {%ifequal filetype 'x' %} selected {%endifequal %}  value="x">x</option>
+        	<option {%ifequal filetype 'y' %} selected {%endifequal %}  value="y">y</option>
+        	<option {%ifequal filetype 'z' %} selected {%endifequal %}  value="z">z</option>
+        </select>
+        排序<select name="order">
+        		<option value="a" {%ifequal showorder 'a' %} selected {%endifequal %}>---</option>
+        	<optgroup label="应用主机数">
+        		<option value="b" {%ifequal showorder 'b' %} selected {%endifequal %}>按主机数升序</option>
+        		<option value="c" {%ifequal showorder 'c' %} selected {%endifequal %}>按主机数降序</option>
+        	</optgroup>
+        	<optgroup label="修订次数">
+        		<option value="d" {%ifequal showorder 'd' %} selected {%endifequal %}>按修订数升序</option>
+        		<option value="e" {%ifequal showorder 'e' %} selected {%endifequal %}>按修订数降序</option>
+        	</optgroup>
+       </select>
+        
+        
+        <input type="submit" value="查询">
+        </td>
+      </tr>
+    </table>
+  	</form>
+  
+    <table width="95%" border="1" align="center" cellpadding="2" cellspacing="2" class="main_table" style="border=1">
+    <thead>
+      <tr>
+        <th align="center" width="12%" height="18" bgcolor="#8A8A8A">快照名称</th>
+        <th align="center" width="11%" height="18" bgcolor="#8A8A8A">使用机器数</th>
+        <th align="center" width="11%" height="18" bgcolor="#8A8A8A">修订次数</th>
+        <th align="center" width="8%" height="18" bgcolor="#8A8A8A">作者</th>
+        <th align="center" width="11%" height="18" bgcolor="#8A8A8A">最后修改人</th>
+        <th align="center" width="18%" height="18" bgcolor="#8A8A8A">最后修改时间</th>
+        <th align="center" width="8%" height="18" bgcolor="#8A8A8A">评价</th>
+      </tr>
+      </thead>
+		<tbody>
+      {%  for obj in object_list  %}
+      <tr onMouseOver="this.style.backgroundColor='#FFFBAC';" onMouseOut="this.style.backgroundColor=''">
+        <td>
+        <a href="/avatar/slotedit/{{obj.fileid}}/?filename={{obj.filename}}" style="text-decoration:none" title="编辑快照文件内容">
+        {{obj.filename}}
+        </a>
+        </td>
+        <td>
+        {% if obj.a %}
+        <a href="/avatar/onehost/{{obj.fileid}}/?keepThis=true&TB_iframe=true&height=250&width=800" style="text-decoration:none" title="详细说明" class="thickbox">
+        {{obj.a}}
+		</a>        
+        {% else %}0{% endif %}</td>
+        <td>{{obj.modifynum}}</td>
+        <td>
+         {% if obj.name %}
+        {{obj.name}}
+        {% else %}
+         --
+        {% endif %}
+        </td>
+        
+        <td>
+         {% if obj.modifypl %}
+        {{obj.modifypl}}
+        {% else %}
+         --
+        {% endif %}
+        </td>
+        
+        
+        <td>{{obj.lastmt}}</td>
+        <td><a href="/avatar/score/{{obj.fileid}}/?keepThis=true&TB_iframe=true&height=380&width=600" style="text-decoration:none" title="查看评分细则" class="thickbox">
+        {{obj.score}}
+        </a></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+      <tfoot>
+      <tr><td colspan="7">
+      <div style="text-align:center;width:75%;font-size:12px;">  
+    {% if is_paginated %}   
+        {% ifequal page 1 %}   
+                 首页   
+        {% else %}    
+                <a href="?page=1&filetype={{filetype}}&order={{showorder}}">首页</a>  
+        {% endifequal %}   
+        {% if has_previous %}    
+               <a href="?page={{ previous }}&filetype={{filetype}}&order={{showorder}}">上一页</a>  
+        {% else %}    
+               上一页   
+        {% endif %}    
+        {% if has_next %}   
+               <a href="?page={{ next }}&filetype={{filetype}}&order={{showorder}}">下一页</a>  
+        {% else %}   
+               下一页   
+        {% endif %}   
+        {% ifequal page pages %}   
+                末页   
+         {% else %}   
+               <a href="?page={{ pages }}&filetype={{filetype}}&order={{showorder}}">末页</a>  
+         {% endifequal %}   
+         &nbsp;&nbsp;   
+          当前页：{{ page }}/{{ pages }}   
+         &nbsp;&nbsp;   
+         {% endif %}   
+</div>  </td></tr>
+      
+      </tfoot>
+    </table>
+  </div>
+{%endblock%}

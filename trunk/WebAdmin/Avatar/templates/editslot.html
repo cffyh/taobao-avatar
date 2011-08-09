@@ -1,0 +1,616 @@
+{%load enconvertch %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>淘宝阿凡达应用快照系统</title>
+<link href="/site_media/css/navatar.css" rel="stylesheet" type="text/css">
+
+
+<script src="http://a.tbcdn.cn/s/yui/3.3.0/build/yui/yui-min.js"></script>
+<script>
+var config = {
+	combine:true,
+	comboBase:'http://a.tbcdn.cn/??',
+	root:'s/yui/3.3.0/build/',
+	filter:{
+		'searchExp': "&", 
+		'replaceStr': ","
+	},
+	modules:{
+		jquery:{
+			path:'jquery-1.4.4.min.js',
+			root:'app/dp/avatar/js/',
+			combine:true			
+		},
+		'jquery-ui':{
+			path:'jquery-ui-1.8.10.custom.min.js',
+			root:'app/dp/avatar/js/',
+			combine:true,
+			requires:['jquery']
+		}
+	}
+};
+var addModule = function(o){
+	YUI().mix(config.modules,o);
+	return config;
+};
+</script>
+<link href="/site_media/css/edit.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<form action="/avatar/slotlist/filesearch/" method="get">
+<div id="search-box">
+  <label for="search_keyword"></label>
+  <input type="search" name="search_keyword" id="search_keyword" style="width:200px" value="{{search_keyword}}"><button class="blue">搜索</button>
+  <br>
+  	{% if search_type%}
+     <label><input id="avatar" value="file" name="search_type" type="radio" {%ifequal search_type 'file' %} checked {%endifequal %} > 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio"  {%ifequal search_type 'host' %} checked {%endifequal %}>  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio"  {%ifequal search_type 'author' %} checked {%endifequal %}>  
+  作者</label>
+    {% else %}
+    <label><input id="avatar" value="file" name="search_type" type="radio" checked> 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio" >  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio">  作者
+    {% endif %}
+</div>
+</form>
+<div class="container">
+  <div class="header"><img src="/site_media/images/head-logo.png" alt="logo"></div>
+  <div class="header2"></div>
+  <div align="right" style="height:30px; vertical-align: text-bottom">&nbsp;</div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="/index/">访问快照集市</a></li>    
+      <li><a href="/avatar/slotlist/mylist/">我参与的快照</a></li>
+      <li><a href="/avatar/slotlist/myconcern/">我关注的快照</a></li>      
+      <li><a href="/avatar/slotlist/alllist/">浏览所有快照</a></li>
+      <li><a href="/avatar/slotlist/extendlist/">被衍生的快照</a></li> 
+      <li><a href="/avatar/loglist/">系统操作日志</a></li> 
+      <li><a href="#">浏览软件仓库</a></li>
+    </ul>
+    <p>{{cname}}，您好！<br><br>
+浏览统计 {{visitnum}}<br><br>
+快照数量 {{snapnum}}<br><br>
+使用快照主机数量 {{servernum}}<br><br>
+订阅数量 {{dingyuenum}}<br><br><button class="gray" onclick="location.href='/login/userexit/'"><<退出系统</button>
+<button class="gray" onclick="location.href='/avatar/report/'">统计页面>></button><br>
+</p>
+   </div>
+   <!-- 编辑的表单内容信息 -->
+  <div class="content">
+  <div class="edit-avatar">
+<form action="/avatar/saveslot/{{file_id}}/" method="post" id="myform">
+<table  class="main_table" align="center" width="90%"  cellpadding="0"  border="1" cellspacing="0">
+<tr>
+        <th colspan="3"  scope="col">快照名称:
+        <input type="text" id="myfilename" name="myfilename" value="{{file_name}}">
+        <input type="hidden" id="myoldfilename" name="myoldfilename" value="{{file_name}}">
+        <input name="urlback" value="{{url_back}}" type="hidden"> 
+        <input name="myfileid" id="myfileid" type="hidden" value="{{file_id}}">
+        </th>
+</tr>
+<tr id="J_option_continer">
+	<td width="45%">
+		<div class="package-content-left">
+			<div class="hd"> 
+				操作系统软件包 Base RPMS ({{mysnapfilecontent.base_rpms_num}})
+			</div>
+			<div class="bd">
+			     <div class="search">
+				<input type="text" id="J_mytext" value="搜索定位"/>
+				</div>
+				<select id="fb_list" name="fb_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.base_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+   　　　		</select>
+                <div class="f_edit"><button class="f_butt" id="J_addopt_f">增加</button>
+                <input type="button" id="J_delopt_f" value="删除" />
+               </div>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>
+	 </td>
+　　　　<td  width="10%" align="center" > 
+　　　　	<input type="button" id="add" value=">>右移"/>
+　　　　　　<div>
+　　　　　　	<input type="button" id="delete" value="<<左移"/>
+            </div>
+　　　　</td>
+　　　　<td width="45%"><div class="package-content-right">
+			<div class="hd"> 
+				应用软件包 Cust RPMS ({{mysnapfilecontent.cust_rpms_num}})
+			</div>
+			<div class="bd">
+			      <div class="search">
+				<input type="text" id="J_othertext" value="搜索定位"/>
+				</div>
+				<select id="select_list" name="select_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.cust_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+   　　　		</select>
+				<div  class="f_edit" style=""><button  class="f_butt" id="J_addopt_s">增加</button>
+				<input type="button" id="J_delopt_s" value="删除" />
+				</div>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>
+　　　　</td>
+</tr>
+
+</table>
+     <table  align="center" border="0" align="center" cellpadding="2" cellspacing="2" class="main_table">
+      <tr>
+        <td colspan="3"><label>软件包内配置文件
+            <select name="diff_files" id="diff_files" style="width:360px;">
+                {% for objlog in mysnapfilecontent.diff_file %}
+				<option value="op{{forloop.counter}}">{{objlog}}</ul>
+			{% endfor %}
+            </select>
+            <input type="hidden" name="diff_filescontent" id="diff_filescontent">
+        </label><button id="J_add_option">新增</button>
+        <input type="button" id="J_del_option" value="删除" />
+        </td>
+      </tr>
+      <tr>
+        <td  id="contets" colspan="3">
+        {% for key in mysnapfilecontent.diff_content.items %}
+        <textarea name="diff_content[]" id="op{{key.0}}" cols="65" rows="15" >{{key.1}}</textarea>
+        {% endfor %}
+        </td>
+        </tr>
+        <tr>
+        	<td colspan="3" style="text-algin:left">
+        		SVN说明备注：<input type="text" size="50" name="memo">
+        	</td>
+        </tr>
+       <tr>
+        <td colspan="3" style="text-algin:center">
+        {% ifequal isauthor "1" %}
+        	 {% ifequal lock "no" %}
+        	 	<span id="actionstatus">
+        	 		<input type="button" class="white" onclick="ajaxlock();" value="加锁">
+        	 		
+        	 		<input type="button" id="subit" class="white" value="提交"/>
+        	 		
+        	 		
+        	 		
+        	 		<input type="button"  class="white" onclick="window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';" value="衍生">
+        	 	</span>
+             {%else%}
+          		<span id="actionstatus">
+        	 		<input type="button" class="white" onclick="ajaxunlock();" value="解锁"/>
+        	 		<input type="button" id="subit" class="white"  value="提交"/>
+        	 		
+        	 		
+        	 		<input type="button"  class="white" onclick="window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';" value="衍生">
+        	 	</span>
+           {% endifequal %} 
+        {% else %}
+        	{% ifequal lock "no" %}
+        	 	<span id="actionstatus">
+        	 		<input type="button" id="subit" class="white" value="提交"/>
+        	 		<input type="button"  class="white" onclick="window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';" value="衍生">
+        	 	</span>
+             {%else%}
+          		<span id="actionstatus">
+        	 		锁定状态
+        	 		<input type="button"  class="white" onclick="window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';" value="衍生">
+        	 	</span>
+        {% endifequal %}
+        {% endifequal %} 
+          </td>
+        </tr>
+    </table>
+     </form>
+  </div>
+
+                </div>
+
+
+
+  
+  <!-- end .content --></div>
+ <div class="footer-grd">
+  </div>
+  <div class="footer">
+    界面语言 关于本系统 问题反馈 - 2011 淘宝技术保障工具开发
+    <!-- end .footer --></div>
+  
+  <!-- end .container --></div>
+</body>
+
+<script type="text/javascript">
+YUI(addModule({
+	'accordion':{
+		path:'accordion.js',
+		root:'app/dp/avatar/js/',
+		combine:true,
+		requires:['node']
+	}
+})).use('accordion');
+
+</script>
+
+
+<script>
+/**
+ * 搜索框的交互
+ */
+
+var test = addModule({//原先的几个模块
+	'tip-input':{
+		fullpath:'http://a.tbcdn.cn/app/dp/s/tip-input/tipinput.js',
+		requires:['node']
+	},
+	'box-skin-default':{//默认皮肤
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/skin/default.css',
+			type:'css'
+		},
+		'box-skin-sea':{//另外一套皮肤
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/skin/sea.css',
+			type:'css'
+		},
+	'box':{
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/box.js',
+			requires:['box-skin-sea','node','overlay','dd-plugin','resize']
+		}
+
+});
+YUI(test).use('tip-input','box','jquery-ui','node',function(Y){
+
+	var mytext = new Y.tipInput('J_mytext');
+	var othertext = new Y.tipInput('J_othertext');
+
+	var leftSelectData = [];//全局变量，增删改查都要修改这个值因为提交的时候要重新渲染DOM
+	var rightSelectData = [];//全局变量，增删改查都要修改这个值因为提交的时候要重新渲染DOM
+	//原始数据保存
+	Y.one('#fb_list').all('option').each(function(node){
+		leftSelectData.push(node.get('value'));
+	});
+	Y.one('#select_list').all('option').each(function(node){
+		rightSelectData.push(node.get('value'));
+	});
+
+	var renderSelect = function(sel,str,key){
+
+		var data = sel.get('id') == 'fb_list'?leftSelectData:rightSelectData;
+		sel.empty();
+		if(str == '' || str == key){
+			Y.Array.each(data,function(item){
+				sel.append('<option value="'+item+'">'+item+'</option>');
+			});
+			return;
+		}
+		var reg = new RegExp(str,'i');		
+		Y.Array.each(data,function(item){
+			if(reg.test(item)){
+				sel.append('<option value="'+item+'">'+item+'</option>');
+			}
+		});
+		
+	};
+	var resetvalue = function(id){
+		var data =id == 'fb_list'?leftSelectData:rightSelectData;
+		sel=Y.one('#'+id);
+		sel.empty();
+		Y.Array.each(data,function(item){
+			sel.append('<option value="'+item+'" selected="selected">'+item+'</option>');
+		});
+		return;	
+	};
+	Y.one("#subit").on("click",function(e){		//整个提交按钮的操作
+		resetvalue('select_list');
+		resetvalue('fb_list');
+		//这里写上要提交的URL
+		o = document.getElementById("diff_files");
+	    var intvalue="";
+	    for(i=0;i<o.length;i++){   
+	    	intvalue+=o.options[i].text+" ";
+	    }
+		$("#diff_filescontent").val(intvalue);
+		document.getElementById("myform").submit();
+	});
+
+ 	Y.all('.search input').on('keyup',function(e){
+		var select = e.target.ancestor('.bd').one('select');
+		renderSelect(select,e.target.get('value'),mytext.defaultvalue);
+	});
+
+	Y.one('#J_option_continer').delegate('dblclick',function(e){
+		var value = e.target.get('value');
+		var newvalue=prompt("请输入要修改的选项的内容",value);//将输入的内容赋给变量 name ，
+		if(newvalue!=null){//修改全局数组
+			var select = e.target.ancestor('.bd').one('select');
+			var data = select.get('id') == 'fb_list'?leftSelectData:rightSelectData;
+			for(var i=0;i<data.length;i++){
+				if(e.target.get("value")==data[i]){//修改全局变量里面的该值
+					data.splice(i,1,newvalue);
+					}
+			}
+		    
+			e.target.replace(Y.Node.create('<option value="'+newvalue+'">'+newvalue+'</option>'));
+			//renderPackage(e.target,newvalue);
+		}	
+	},'option');
+	var dele_option_content=function(d_id){
+		if(confirm('是否要删除这个选项？')){
+			var selt=Y.one("#"+d_id);
+			var op=selt.get('selectedIndex');
+			var option=selt.get("options").item(op);
+			var data = d_id == 'fb_list'?leftSelectData:rightSelectData;
+			for(var i=0;i<data.length;i++){
+				if(option.get("value")==data[i]){
+					data.splice(i,1);//删除全局变量里面的这个值
+					}
+			}
+			if(op!=-1){
+				selt.all('option').item(op).remove();
+			}
+		}
+	};
+	Y.one("#J_delopt_f").on('click',function(e){
+		dele_option_content('fb_list');
+	});
+	Y.one("#J_delopt_s").on('click',function(e){
+		dele_option_content('select_list');
+	});
+	box = null;
+	var add_option_content=function(e,s_id){
+		e.halt();
+		box = Y.Box.confirm('<div><input type="text" id="bao_name"/></div>',function(box){
+			var add_titl=Y.one("#bao_name").get('value');
+			var node=Y.Node.create('<option value="'+add_titl+'">'+add_titl+'</option>');
+			var sel=Y.one("#"+s_id);
+			sel.append(node);
+			var data = sel.get('id') == 'fb_list'?leftSelectData:rightSelectData;
+			data.push(add_titl);
+		},{
+			anim:false,
+			title:'编辑操作系统软件包 Base RPMS',
+			no:function(box){
+				box.body='';
+			},
+			draggable:true ,
+			resizeable:true,
+			cancleBtn:true,
+			cancleTxt:'cancle',
+			draggable:true,
+			cancleBtn:false,
+			afterDrag:function(box){
+				Y.log('拖拽confirm over');
+			},
+			afterShow:function(box){
+				Y.log('显示comfirm over');
+			},
+		});
+	};
+	Y.one("#J_addopt_f").on('click',function(e){
+		add_option_content(e,'fb_list');
+		
+	});
+	Y.one("#J_addopt_s").on('click',function(e){
+		add_option_content(e,'select_list');
+	});
+
+	$(function(){ 
+	$("#add").click(function(){ 
+		if($("#fb_list option:selected").length>0){  
+			$("#fb_list option:selected").each(function(){ 
+						$("#select_list").append("<option value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+			$(this).remove();  
+			for(var i=0;i<leftSelectData.length;i++){
+				if($(this).val()==leftSelectData[i]){
+					leftSelectData.splice(i,1);//删除全局变量里面的这个值
+					rightSelectData.push($(this).val());
+					}
+			}
+		})}else{ 		
+		alert("请选择要添加的分包！"); 
+		} 
+       }) 
+	});
+	$(function(){ 
+		$("#delete").click(function(){ 
+			if($("#select_list option:selected").length>0){  
+			$("#select_list option:selected").each(function(){ 
+						$("#fb_list").append("<option value='"+$(this).val()+"'>"+$(this).text()+"</option>");
+						$(this).remove();  
+						for(var i=0;i<rightSelectData.length;i++){
+							if($(this).val()==rightSelectData[i]){
+								rightSelectData.splice(i,1);//删除全局变量里面的这个值
+								leftSelectData.push($(this).val());
+						}
+			}
+		})}else{ 		
+		alert("请选择要删除的分包！"); 
+		} 
+       }) 
+	});
+});
+</script>
+
+
+<script>
+function   randomChar(l)   {
+	   var   x="0123456789qwertyuioplkjhgfdsazxcvbnm";
+	   var   tmp="";
+	   for(var   i=0;i<   l;i++)   {
+	   tmp   +=   x.charAt(Math.ceil(Math.random()*100000000)%x.length);
+	   }
+	   return   tmp;
+}
+
+YUI(config).use('node',function(Y){
+});
+
+YUI({
+	combine:true,
+	comboBase:'http://a.tbcdn.cn/??',
+	root:'/s/yui/3.3.0/build/',
+	filter:{
+		'searchExp': "&", 
+		'replaceStr': ","
+	},
+	modules:{
+		'box-skin-default':{//默认皮肤
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/skin/default.css',
+			type:'css'
+		},
+		'box-skin-sea':{//另外一套皮肤
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/skin/sea.css',
+			type:'css'
+		},
+		'box':{
+			fullpath:'http://a.tbcdn.cn/app/dp/s/box/box.js',
+			requires:['box-skin-sea','node','overlay','dd-plugin','resize']
+		}
+	}
+}).use('box','console',function(Y){
+	box = null;
+	Y.one("#J_add_option").on('click',function(e){
+		e.halt();
+		box = Y.Box.confirm('<p>配置文件名:<input type="text" id="opt_title"/></p><p>配置文件内容:<textarea cols="50" rows="10" id="opt_add" ></textarea></p>',function(box){
+			var myid = randomChar(10);
+			var add_titl=Y.one("#opt_title").get('value');
+			if(/^\d+/.test(add_titl)){
+				Y.Box.alert('标题不能以数字开始，必须为字母或者下划线开始');
+				return false;
+			}
+			var add_cont=Y.one("#opt_add").get('value');
+			var node=Y.Node.create('<option value="'+myid+'">'+add_titl+'</option>');
+			var sel=Y.one("#diff_files");
+			sel.append(node);
+			var content=Y.Node.create('<textarea cols="50" rows="10" name=\'diff_content[]\'  id="'+myid+'">'+add_cont+'</textarea>');
+			var cot=Y.one('#contets').append(content);
+			//debugger;
+			Y.Node.getDOMNode(sel).selectedIndex = sel.all('option').size()-1;
+			renderSelectTextarea();
+
+		},{
+			width:'500px',
+			height:'400px',
+			anim:false,
+			title:'编辑软件包内配置文件',
+			resizeable:true,
+			cancleTxt:'cancle',
+			draggable:true,
+			cancleBtn:false
+			
+			
+		});
+	});
+
+	//软件包select控件和textarea的联动的交互
+	var renderSelectTextarea = function(){
+		Y.all('textarea').each(function(node){
+			node.setStyle('display','none');
+		});
+		var value = Y.one('#diff_files').get('value');
+		Y.one('#'+value).setStyle('display','');
+		
+	};
+    Y.one('#J_del_option').on('click',function(e){
+        if(confirm('是否要删除这个选项？')){
+            var s = Y.one('#diff_files');
+			var value = s.get('value');
+			//debugger;
+			s.all('option').each(function(node){
+				if(node.get('value') == value){
+					node.remove();
+					Y.one('#'+value).remove();
+					renderSelectTextarea();
+				}
+			});
+        }
+    });
+	
+	Y.one('#diff_files').on('change',function(){
+		renderSelectTextarea();
+	});
+
+	Y.on('domready',function(){
+		renderSelectTextarea();
+	});
+		
+});
+</script>
+
+
+
+
+<script>
+function ajaxlock(){
+    //用户加锁
+    var myfilename = $("#myfilename").val();
+    var myfileid = $("#myfileid").val();
+    $.ajax({
+            type:"GET",
+            url: "/avatar/snaplock/lock/"+myfileid+"/?filename="+myfilename,
+            success:function(msg){
+                    if(msg == "1") {
+                            alert("成功上锁，别人不可以编辑此快照");
+                            $("#actionstatus").html("<input type=\"button\" class=\"white\" onclick=\"ajaxunlock();\" value=\"解锁\"><input type=\"submit\" class=\"white\" onclick=\"checkhello()\" value=\"提交\"/><input type='button' class=\"white\" onclick=\"window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';\" value='衍生'>");
+                    }else{
+                            alert("加锁失败");
+                            return;
+                    }
+
+
+            }
+    })
+}
+
+function ajaxunlock(){
+    //用户加锁
+    var myfilename = $("#myfilename").val();
+    var myfileid = $("#myfileid").val();
+    $.ajax({
+            type:"GET",
+            url: "/avatar/snaplock/unlock/"+myfileid+"/?filename="+myfilename,
+            success:function(msg){
+                    if(msg == "1") {
+                            alert("成功解锁，别人可以编辑此快照");
+                            $("#actionstatus").html("<input type=\"button\" class=\"white\" onclick=\"ajaxlock();\" value=\"加锁\"><input type=\"submit\" class=\"white\" onclick=\"checkhello()\" value=\"提交\"/><input type='button' class=\"white\" onclick=\"window.location.href='/avatar/view_inheritance/inheritanceshow/?filename={{file_name}}&fileid={{file_id}}';\" value='衍生'>");
+                    }else{
+                            alert("解锁失败");
+                            return;
+                    }
+            }
+    })
+}
+</script>
+
+
+<script type="text/javascript">
+//提交表单事件
+/*
+function checkhello()
+{
+	var objs=document.getElementById("fb_list").options;
+	for (i=0; i< objs.length; i++)
+	{
+		objs[i].selected=true;
+	}
+	var objs1=document.getElementById("select_list").options;
+	for (i=0; i< objs1.length; i++)
+	{
+		objs1[i].selected=true;
+	}
+	//将diff_files的内容提交到服务器端
+	o = document.getElementById("diff_files");
+    var intvalue="";
+    for(i=0;i<o.length;i++){   
+    	intvalue+=o.options[i].text+" ";
+    }
+	$("#diff_filescontent").val(intvalue);
+	return true;
+}
+*/
+</script>
+</html>

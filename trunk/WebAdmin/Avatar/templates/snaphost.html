@@ -1,0 +1,15 @@
+<link rel="stylesheet" href="/site_media/css/avatar.css">
+<div class="content">
+    <table width="95%" border="1" align="center" cellpadding="2" cellspacing="2" class="main_table" style="border=1">
+      <tr>
+        <th scope="col">主机组</th>
+        <th scope="col">机器数</th>
+      </tr>
+      {% for obj in object_list %}
+      <tr onMouseOver="this.style.backgroundColor='#FFFBAC';" onMouseOut="this.style.backgroundColor=''">
+        <td>{{obj.hostgroup}}</td>
+        <td>{{obj.hostnumber}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>

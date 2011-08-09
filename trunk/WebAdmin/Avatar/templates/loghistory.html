@@ -1,0 +1,93 @@
+<link rel="stylesheet" href="/site_media/css/avatar.css">
+<script type="text/javascript" src="/site_media/js/jquery-1.5.1.min.js"></script>
+<div class="content">
+    <table width="95%" border="1" align="center" cellpadding="2" cellspacing="2" class="main_table" style="border=1">
+      <tr>
+        <td colspan="3">查看快照文件内容</td>
+        </tr>
+        <tr>
+        <td>
+   			<div class="package-content-left">
+			<div class="hd"> 
+				操作系统软件包 Base RPMS ({{mysnapfilecontent.base_rpms_num}})
+			</div>
+			<div class="bd">
+				<select id="fb_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.base_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+				</select>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>     
+        </td>
+        <td  width="4%" align="center" > 
+　　　　</td>
+		<td width="49%" height="100px"><div class="package-content-right">
+			<div class="hd"> 
+				 自定义应用软件包 Cust RPMS
+			</div>
+			<div class="bd">
+				<select id="select_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.cust_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+   　　　			</select>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>
+　　　　</td>
+      </tr>
+      <tr>
+        <td colspan="3"><label>软件包内配置文件
+        <select name="diff_files" id="diff_files" style="width:360px;" onchange="showdiv(this.value)">
+                {% for objlog in mysnapfilecontent.diff_file %}
+				<option value="op{{forloop.counter}}">{{objlog}}</ul>
+			{% endfor %}
+            </select>
+        </label></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+	        <input type="hidden" id="diff_file_length" value="{{mysnapfilecontent.diff_file_length}}">
+	        {% for key in mysnapfilecontent.diff_content.items %}
+        
+        {% ifequal forloop.counter 1%}
+        <div id="op{{key.0}}">
+        <textarea name="diff_content[]"  cols="65" rows="15" >{{key.1}}</textarea>
+        </div>
+        {% else %}
+        
+        <div id="op{{key.0}}" style="display:none;">
+        <textarea name="diff_content[]"  cols="65" rows="15" >{{key.1}}</textarea>
+        </div>
+        
+        
+        {%endifequal%}
+        {% endfor %}
+	        
+        </td>
+        </tr>
+      
+      <tr>
+        <td colspan="3">说明:{{mysnapfilecontent.comment}}
+        </td>
+      </tr>
+    </table>
+  </div>
+<script type="text/javascript">
+function showdiv(val){
+	//变更DIV的显示
+	num = $("#diff_file_length").val();
+	for(var i=1;i<=num;i++){
+		if("op"+i == val) {
+			$("#op"+i).css("display","block");   
+		} else {
+			$("#op"+i).css("display","none"); 
+		}  
+	}
+}
+
+</script>
