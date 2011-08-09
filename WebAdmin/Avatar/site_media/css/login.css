@@ -1,0 +1,92 @@
+@charset "utf-8";
+* {
+  margin:0;
+  padding:0;
+}
+body {
+  color:#333333;
+  font-family:Tahoma,Verdana,Arial,Helvetica,sans-serif,"";
+  font-size:12px;
+  line-height:1.6;
+}
+ul, ol, li {
+  list-style:none;
+}
+a:link,a:visited{
+  color:#333333;
+  text-decoration:none;
+}
+a:hover{
+  color:#ff9933;
+  text-decoration:none;
+ }
+img { 
+  border:0 none;}
+.clear{ clear:both;}
+/*头部head*/
+#head{ width:100%; height:101px; margin-bottom:15px;}
+#headbar{ width:940px; height:70px;margin:0 auto; background:url(../images/Logo-BG.png) 0 0 no-repeat; text-align:right; padding-right:20px; padding-top:55px; color:#fff; overflow:hidden;}
+#headbar a{ margin:0 5px; font-weight:bold;}
+#headbar a:link,#headbar a:visited{ color:#fff;}
+#headbar a:hover{ color:#ff9933;}
+/*内容content*/
+#content{ width:960px; margin:0 auto 30px; height:100%;}
+#con-title{height:20px; overflow:hidden; width:930px;font-size:14px;font-weight:bold; padding-left:30px; color:#333333;}
+#con-title ul{height:36px;overflow:hidden;padding:0 0 0 30px;text-align:center;width:960px;}
+#con-title ul li{ float:left; display:inline;}
+#con-t,#con-b{ width:960px; height:8px; overflow:hidden;}
+#con-t{background:url(con-bg_t.gif) 0 0 no-repeat;}
+#con-b{background:url(con-bg_b.gif) 0 0 no-repeat;}
+#con-c{ border-left:12px solid #ededed; border-right:12px solid #ededed; border-top:5px solid #ededed; border-bottom:5px solid #ededed; width:936px; background:#ededed;}
+#con-c form{ width:936px; height:100%; overflow:hidden;}
+/*loginbar登录框,lostbar忘记密码,findbar找回密码*/
+.loginbar,.lostbar,.findbar,.areabar{ float:left;overflow:hidden; background:#6699CC; font-size:14px;}
+.loginbar{ width:456px; padding:80px 90px 90px;  height:160px;}
+.lostbar{ width:416px; padding:85px 110px;  height:160px;}
+.findbar{ width:546px; padding:80px 45px 90px; height:160px;}
+.areabar{ width:416px; padding:50px 110px 70px; height:210px;}
+
+.loginbar li{width:456px; height:45px; overflow:hidden;}
+.lostbar li,.areabar li{height:45px;overflow:hidden;width:416px;}
+.findbar li{height:45px;overflow:hidden;width:546px;}
+.findbar li span{ color:#ff6600; font-weight:bold; margin-left:3px;}
+.findbar li a{ margin-left:3px;}
+.loginbar li p,.uregisterbar li p,.lostbar li p,.findbar li p,.areabar li p{ float:left;}
+.loginbar .p1,.lostbar .p1,.findbar .p1{overflow:hidden;padding:5px 0 0;width:70px; font-size:14px;}
+.areabar .p1{overflow:hidden;width:70px; font-size:14px;}
+.loginbar .p3,.lostbar .p3,.findbar .p3,.areabar .p3{ margin-left:5px; margin-top:4px;}
+.text-input1{width:260px; border:1px solid #B5B8C8;font-size:14px;padding:6px;background:#fff;}
+.text-input2{width:160px; border:1px solid #B5B8C8;font-size:14px;padding:6px;background:#fff;}
+.text-input1:focus,.inputon{border:1px solid #6BB044; background:#F3FFE6;}
+.text-input2:focus{border:1px solid #6BB044; background:#F3FFE6;}
+#province,#select2,#select3{ width:100px; padding:1px;}
+.submit{ background:#3d980f; width:60px; height:29px; border:0 none; cursor:pointer; color:#fff; margin-right:10px; font-weight:bold;}
+.rest a{ margin-right:8px;}
+.rest a:link,.rest a:visited{ color:#008cbf; text-decoration:underline;}
+.rest a:hover{ color:#ff9933;}
+/*uregisterbar注册框*/
+#con-c .uregisterbar{ float:left; width:546px; height:380px; padding:33px 45px 17px; overflow:hidden; background:#fff;}
+#con-c .uregisterbar li{overflow:hidden;width:546px; margin-bottom:4px;}
+.uregisterbar .p1{ width:70px; font-size:14px; overflow:hidden;padding-top:2px;}
+.uregisterbar .p3{ margin-left:10px;  width:225px; padding-top:2px; overflow:hidden; display:block;}/*display=>change*/
+.fail{/*background:url(fail.gif) 0 center no-repeat; color:#ff6600;padding-left:15px;*/color:red;padding-left:15px;}
+.uregisterbar .p4{ clear:both; padding-left:70px; color:#999999; width:476px; overflow:hidden; }
+.text-input{width:200px;}
+.text-input3{width:120px;}
+input.text-input,input.text-input3{border:1px solid #B5B8C8;padding:4px; background:#fff;}
+input.text-input:focus,input.text-input3:focus{border:1px solid #6BB044; background:#F3FFE6;}
+.inputerror{ border:1px solid #F0B394; background:#FFEFE7;}
+/*show解释说明*/
+#con-c .show{ width:297px; overflow:hidden; height:329px; float:right; padding-left:2px; padding-top:1px;}
+.show h1{ font-size:14px; font-weight:bold; height:40px; line-height:33px; color:#000;}
+.show ul li{ padding-left:45px;}
+.show ul li h2{ font-size:12px; color:#3d980f; line-height:22px;}
+.show ul li p{ line-height:18px; width:215px; overflow:hidden; margin-bottom:5px;}
+.li1{ background:url(icon1.png) 0 center no-repeat;}
+.li2{ background:url(icon2.png) 0 center no-repeat;}
+.li3{ background:url(icon3.png) 0 center no-repeat;}
+.li4{ background:url(icon4.png) 0 center no-repeat;}
+/*foot底部*/
+#footer{ width:960px; height:36px; line-height:36px; margin-top:30px; margin:0 auto; text-align:center;}
+#footer a:link,#footer a:visited{ color:#008cbf; text-decoration:underline;}
+#footer a:hover{ color:#ff9933;}

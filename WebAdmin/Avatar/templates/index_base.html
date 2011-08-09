@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="expires" content="Sunday 26 October 2012 01:00 GMT" />
+<script src="/site_media/js/jquery-1.5.1.min.js"></script>
+<style type="text/css">
+.inactive { background: red; }
+.active {background:#fff000; }
+</style>
+<script type="text/javascript">
+var oplist = new Array('about', 'user', 'news', 'mars', 'jielong', 'box', 'school', 'config', 'other','boxs');
+$(document).ready(function() {
+	$('#sidebar1').find("a").click(function() {
+		var id = $(this).attr('id');
+		$.each(oplist, function(i, n) {
+			$('#'+n).attr('class', 'inactive');
+		});
+		$(this).parents("li").attr('class', 'active');
+	});
+});
+</script>
+
+<title>阿凡达应用快照系统</title>
+<link rel="stylesheet" href="/site_media/css/avatar.css">
+</head>
+<body>
+<div class="container">
+<form action="/avatar/slotlist/filesearch/" method="get">
+  <div class="header"><img src="/site_media/images/head-logo.png" alt="logo">
+  
+    <div id="search-box">
+  <label for="search_keyword"></label>
+  <input type="search" name="search_keyword" id="search_keyword" value="{{search_keyword}}" style="width:200px"><button class="blue">搜索</button>
+  <br>
+     {% if search_type%}
+     <label><input id="avatar" value="file" name="search_type" type="radio" {%ifequal search_type 'file' %} checked {%endifequal %} > 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio"  {%ifequal search_type 'host' %} checked {%endifequal %}>  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio"  {%ifequal search_type 'author' %} checked {%endifequal %}>作者  </label>
+    {% else %}
+    <label><input id="avatar" value="file" name="search_type" type="radio" checked> 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio" >  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio">  作者
+    {% endif %}
+</div>
+
+  </div></form><!-- end of header -->
+  <div class="header2"></div>
+  <div class="sidebar1">
+    <ul class="nav">
+    <li class="active" id="box"><a href="/index/" >访问快照集市</a></li>    
+      <li class="inactive" id="jielong"><a href="/avatar/slotlist/mylist/" >我参与的快照</a></li>
+      <li class="inactive" id="mars"><a href="/avatar/slotlist/myconcern/" >我关注的快照</a></li>      
+      <li class="inactive" id="news"><a href="/avatar/slotlist/alllist/" >浏览所有快照</a></li>
+      <li class="inactive" id="other"><a href="/avatar/slotlist/extendlist/" >被衍生的快照</a></li> 
+      <li class="inactive" id="user"><a href="/avatar/loglist/" >系统操作日志</a></li> 
+      <li><a href="http://yum.corp.taobao.com"  target="_blank">浏览软件仓库</a></li>
+    </ul>
+    <p>{{cname}}，您好！<br><br>
+浏览统计 {{visitnum}}<br><br>
+快照数量 {{snapnum}}<br><br>
+使用快照主机数量 {{servernum}}<br><br>
+订阅数量 {{dingyuenum}}<br><br><button class="gray" onclick="location.href='/login/userexit/'"><<退出系统</button>
+<button class="gray" onclick="location.href='/avatar/report/'">统计页面>></button>
+    <p><a href='http://weibo.com/taobaoavatar' target='_blank'><img src="/site_media/images/weibo.png" width="32" height="32" alt="weibo" border="0"></a><a href='http://code.google.com/p/taobao-avatar/' target='_blank'><img src="/site_media/images/google.png" width="32" height="32" alt="google" border="0"></a><br>
+    </p>
+  <!-- end .sidebar1 --></div>
+{% block content %}content{% endblock %}
+
+<div class="footer-grd"></div>
+<!-- end .container --></div>
+<div class="footer">
+    界面语言 关于本系统 问题反馈 - 2011 淘宝技术保障工具开发
+    <!-- end .footer --></div>  
+</div>
+</body>
+</html>

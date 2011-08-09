@@ -1,0 +1,398 @@
+{%load enconvertch %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>淘宝阿凡达应用快照系统</title>
+<script type="text/javascript" src="/site_media/js/jquery-1.5.1.min.js"></script>
+<link href="/site_media/css/navatar.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/site_media/js/thickbox.js"></script>
+<link rel="stylesheet" href="/site_media/css/thickbox.css">
+</head>
+<body>
+<div class="container">
+<form action="/avatar/slotlist/filesearch/" method="get">
+
+<div class="header"><img src="/site_media/images/head-logo.png" alt="logo">
+    <div id="search-box">
+  <label for="search_keyword"></label>
+  <input type="search" name="search_keyword" id="search_keyword" style="width:200px" value="{{search_keyword}}"><button class="blue">搜索</button>
+  <br>
+  	{% if search_type%}
+     <label><input id="avatar" value="file" name="search_type" type="radio" {%ifequal search_type 'file' %} checked {%endifequal %} > 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio"  {%ifequal search_type 'host' %} checked {%endifequal %}>  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio"  {%ifequal search_type 'author' %} checked {%endifequal %}>  
+  作者</label>
+    {% else %}
+    <label><input id="avatar" value="file" name="search_type" type="radio" checked> 快照</label>
+      <label><input id="host" value="host" name="search_type" type="radio" >  主机组或主机名</label> 
+      <label><input id="package" value="author" name="search_type" type="radio">  作者
+    {% endif %}
+</div>
+  </div><!-- end of header -->
+  
+  </form>
+  
+  <div class="header2"></div>
+  <div class="sidebar1">
+    <ul class="nav">
+      <li><a href="/index/">访问快照集市</a></li>    
+      <li><a href="/avatar/slotlist/mylist/">我参与的快照</a></li>
+      <li><a href="/avatar/slotlist/myconcern/">我关注的快照</a></li>      
+      <li><a href="/avatar/slotlist/alllist/">浏览所有快照</a></li>
+      <li><a href="/avatar/slotlist/extendlist/">被衍生的快照</a></li> 
+      <li><a href="/avatar/loglist/">系统操作日志</a></li> 
+      <li><a href="#">浏览软件仓库</a></li>
+    </ul>
+    <p>{{cname}}，您好！<br><br>
+浏览统计 {{visitnum}}<br><br>
+快照数量 {{snapnum}}<br><br>
+使用快照主机数量 {{servernum}}<br><br>
+订阅数量 {{dingyuenum}}
+<br><br>
+<button class="gray" onclick="location.href='/login/userexit/'"><<退出系统</button>
+<button class="gray" onclick="location.href='/avatar/report/'">统计页面 >></button><br>
+</p>
+  <!-- end .sidebar1 --></div>
+  <div class="content">
+  <div class="edit-avatar">
+    <table border="0" align="center" cellpadding="2" cellspacing="2" class="main_table">
+      <tr>
+        <th colspan="3" scope="col">
+        {{file_name}}
+        <input type="hidden" id="myfileid" value="{{file_id}}">
+          </th>
+        </tr>
+      <tr>
+        <td colspan="2">
+        <button class="opsfree_link" onclick="location.href='/avatar/hostslot/{{file_id}}/?filename={{file_name}}'">
+        <img src="/site_media/images/computer_link.png" alt="OpsFree" width="80" height="32" align="absmiddle">关联设定(已关联{% if oneservernum %} {{oneservernum}} {% else %} 0 {%endif%} )
+        </button>
+        <td> 
+        
+         评价<div id="star">
+<ul id="star0" class="star" onMouseDown="star.update(event,this)" onMouseMove="star.mouse(event,this)" title="Rate This!">
+
+  <li id="starCur0" class="curr" title="98" style="width: 82px;"></li>
+ </ul>
+         </div>
+
+
+ <div style="color: rgb(136, 136, 136);" id="starUser0" class="user">98%</div>
+ <input type="hidden" id="checktype" value="0">
+
+      </td>
+      </tr>
+      <tr>
+        <td colspan="2">参与维护人：   
+         {% for objlog in authorlist %}
+				{{objlog|enconvertch}}&nbsp;&nbsp;
+			{% endfor %}
+			</td>
+			
+			
+			
+			
+        <td><span id="myconcerid">
+		  {% ifequal flag "off" %}<font color='black'><a onclick="doconcer('off');" style="text-decoration:none">点击关注</a></font>
+		  <img src="/site_media/images/on.gif"  width="16" height="16" align="absmiddle">
+		  {% endifequal %} 
+    	  {% ifequal flag "ok" %}<font color='red'><a onclick="doconcer('on');" style="text-decoration:none">你已关注</a></font>
+    	  <img src="/site_media/images/off.gif" width="16" height="16" align="absmiddle">
+    	  {% endifequal %} 
+    	</span></td>
+      </tr>
+      <tr>
+        <td colspan="3">查看快照内容</td>
+        </tr>
+        <tr>
+        <td>
+        
+   			<div class="package-content-left">
+			<div class="hd"> 
+				操作系统软件包 Base RPMS ({{mysnapfilecontent.base_rpms_num}})
+			</div>
+			<div class="bd">
+			<span style="overflow-x:scroll;width:100" > 
+				<select id="fb_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.base_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+				</select>
+			</span>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>     
+        </td>
+        <td  width="4%" align="center" > 
+　　　　</td>
+		<td width="49%" height="100px"><div class="package-content-right">
+			<div class="hd"> 
+				 自定义应用软件包 Cust RPMS({{mysnapfilecontent.cust_rpms_num}})
+			</div>
+			<div class="bd">
+				<select id="select_list" multiple="multiple" class="search_locate">
+				{% for ele in mysnapfilecontent.cust_rpms%}
+				<option value="{{ele}}">{{ele}}</option>
+				{%endfor%}
+   　　　			</select>
+			</div>
+			<div class="ft"> 
+			</div>
+		</div>
+　　　　</td>
+      </tr>
+      <tr>
+        <td colspan="3"><label>软件包内配置文件
+			<select name="diff_files" id="diff_files" style="width:360px;" onchange="showdiv(this.value)">
+                {% for objlog in mysnapfilecontent.diff_file %}
+				<option value="op{{forloop.counter}}">{{objlog}}</ul>
+			{% endfor %}
+            </select>
+			
+        </label></td>
+      </tr>
+      <tr>
+        <td colspan="3">
+        <input type="hidden" id="diff_file_length" value="{{mysnapfilecontent.diff_file_length}}">
+        {% for key in mysnapfilecontent.diff_content.items %}
+        
+        {% ifequal forloop.counter 1%}
+        <div id="op{{key.0}}">
+        <textarea name="diff_content[]"  cols="65" rows="15" >{{key.1}}</textarea>
+        </div>
+        {% else %}
+        
+        <div id="op{{key.0}}" style="display:none;">
+        <textarea name="diff_content[]"  cols="65" rows="15" >{{key.1}}</textarea>
+        </div>
+        
+        
+        {%endifequal%}
+        {% endfor %}
+        </td>
+        </tr>
+  
+      
+       <tr>
+        <td colspan="3" style="text-algin:center">
+        <button class="gray" onclick="location.href='/avatar/sloteditfile/?filename={{file_name}}&fileid={{file_id}}'">编辑</button>
+        
+          </td>
+        </tr>
+        
+        
+        {%if svnlog%}
+        <tr>
+        <td colspan="3" style="text-algin:center">
+        		<table border="0" align="center" cellpadding="2" width="100%" cellspacing="2">
+			      <tr>
+			        	<th>
+			        		版本
+			          	</th>
+			          	<th>
+			        		时间
+			          	</th>
+			          	<th>
+			        		修订人
+			          	</th>
+			        </tr>
+			      {% for objlog in svnlog %}
+			      <tr>
+			      	<td>
+			      	<a href="/avatar/getavatar/?namespace={{file_name}}&revision={{objlog.revision}}&keepThis=true&TB_iframe=true&height=600&width=700" style="text-decoration:none" title="详细说明" class="thickbox">
+					r{{forloop.counter0 }}</a>
+			      	</td>
+			      	<td>{{objlog.date}}</td>
+			      	<td>
+			      	{{objlog.author|enconvertch}}&nbsp;{{objlog.date}}
+			      	</td>
+			     </tr>
+			     {%endfor%}
+			   </table>
+        </td>
+        </tr>
+        {%endif%}
+        
+        
+        
+    </table>
+    
+    
+    
+    
+    
+    
+	
+  </div>
+  
+  <div class="avatar-log">
+	<ul class="accordion" id="vertical">
+	
+	<li class="slide-02">
+<div>
+			<span class="log-header">调用记录</span><img src="/site_media/images/sign-out.png" alt="sign-out" width="16" height="16" align="absmiddle">
+
+{%  for obj in historylist  %}
+<ul>{{obj.clientip}}&nbsp;
+{{obj.times}}
+&nbsp;{{obj.version}}</ul>
+{% endfor %}
+
+
+		</div>
+	</li>
+		<li class="slide-03">
+			<div>
+			  <span class="log-header">评价记录</span><img src="/site_media/images/spechbubble_2.png" alt="comment" width="16" height="16" align="absmiddle">
+{%  for obj in scorelist  %}
+<ul>{{obj.times}}&nbsp;
+{% if obj.a %}
+{{obj.a}}
+{%else%}
+--
+{%endif%}
+&nbsp;{{obj.score}}分</ul>
+{% endfor %}
+		  </div>
+		</li>
+		<li class="slide-04">
+		<div>
+			<span class="log-header">访问记录</span><img src="/site_media/images/eye_inv.png" alt="views" width="16" height="16" align="absmiddle">
+{%  for obj in visitlist  %}
+<ul>{{obj.times}}&nbsp;{% if obj.a %}
+{{obj.a}}
+{%else%}
+--
+{%endif%}</ul>
+{% endfor %}
+		  </div>
+		</li>
+		<li class="slide-05">
+			<div>
+			  <span class="log-header">关注用户</span><img src="/site_media/images/user_silhouette.png" alt="users" width="16" height="16" align="absmiddle">
+{%  for obj in concerlist  %}
+<ul>{% if obj.a %}
+{{obj.a}}
+{%else%}
+--
+{%endif%}</ul>
+{% endfor %}
+		  </div>
+		</li>
+	</ul>
+  </div>
+  
+  <!-- end .content --></div>
+  <div class="footer-grd">
+  </div>
+  <div class="footer">
+    界面语言 关于本系统 问题反馈 - 2011 淘宝技术保障工具开发
+    <!-- end .footer --></div>
+  <!-- end .container --></div>
+</body>
+</html>
+<script type="text/javascript">
+
+function showdiv(val){
+	//变更DIV的显示
+	num = $("#diff_file_length").val();
+	for(var i=1;i<=num;i++){
+		if("op"+i == val) {
+			$("#op"+i).css("display","block");   
+		} else {
+			$("#op"+i).css("display","none"); 
+		}  
+	}
+}
+
+</script>
+<script type="text/javascript">
+function doconcer(type) {
+	//如果type==off 表示现在还没有关注要申请关注
+	var usertableid = $("#myfileid").val();		//快照文件的ID
+	$.ajax({
+		type:"GET",
+		url: "/avatar/concern/"+usertableid+"/"+type+"/",								
+		success:function(msg){
+			if(msg == 1) {
+				$("#myconcerid").html("<font color='black'><a href='#' onclick=\"doconcer('off');\" style=\"text-decoration:none\">点击关注</a></font><img src=\"/site_media/images/on.gif\" width=\"16\" height=\"16\" align=\"absmiddle\">");
+			}else{
+				$("#myconcerid").html("<font color='red'><a href='#' onclick=\"doconcer('on')\"  style=\"text-decoration:none\">你已关注</a></font><img src=\"/site_media/images/off.gif\" width=\"16\" height=\"16\" align=\"absmiddle\">");
+			}
+		}			
+	})	
+}
+//-->
+</script>
+
+
+
+<script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
+/* AJAX Star Rating : v1.0.3 : 2008/05/06 */
+/* http://www.nofunc.com/AJAX_Star_Rating/ */
+function $Z(v,o) { return((typeof(o)=='object'?o:document).getElementById(v)); }
+function $S(o) { return((typeof(o)=='object'?o:$Z(o)).style); }
+function agent(v) { return(Math.max(navigator.userAgent.toLowerCase().indexOf(v),0)); }
+function abPos(o) { var o=(typeof(o)=='object'?o:$Z(o)), z={X:0,Y:0}; while(o!=null) { z.X+=o.offsetLeft; z.Y+=o.offsetTop; o=o.offsetParent; }; return(z); }
+function XY(e,v) { var o=agent('msie')?{'X':event.clientX+document.body.scrollLeft,'Y':event.clientY+document.body.scrollTop}:{'X':e.pageX,'Y':e.pageY}; return(v?o[v]:o); }
+star={};
+star.mouse=function(e,o) { if(star.stop || isNaN(star.stop)) { star.stop=0;
+	document.onmousemove=function(e) { var n=star.num;
+		var p=abPos($Z('star'+n)), x=XY(e), oX=x.X-p.X, oY=x.Y-p.Y; star.num=o.id.substr(4);
+		if(oX<1 || oX>84 || oY<0 || oY>19) { star.stop=1; star.revert(); }
+		else {
+			$S('starCur'+n).width=oX+'px';
+			$S('starUser'+n).color='#111';
+			$Z('starUser'+n).innerHTML=Math.round(oX/84*100)+'%';
+		}
+	};
+} };
+star.update=function(e,o) { 
+	var usertableid = $("#myfileid").val();		//快照文件的ID
+	var n=star.num, v=parseInt($Z('starUser'+n).innerHTML);
+	n=o.id.substr(4); 
+	$Z('starCur'+n).title=v;
+
+	if ($("#checktype").val() == "1") {
+		alert("你已评过分了,不要刷分");
+		return;
+	}
+	$.post(
+		"/avatar/score/"+usertableid+"/", 
+		{ vote:v},
+		function(msg){
+			if(msg == 1) {
+				alert("你的评分为:"+(v) + "分!感谢支持");
+				$("#checktype").val("1");
+			}else{
+				alert("系统提交失败！");
+			}
+		}
+	);
+		
+};
+star.revert=function() { var n=star.num, v=parseInt($Z('starCur'+n).title);
+	$S('starCur'+n).width=Math.round(v*84/100)+'px';
+
+	$Z('starUser'+n).innerHTML=(v>0?Math.round(v)+'%':'');
+
+	$Z('starUser'+n).style.color='#888';
+	document.onmousemove='';
+};
+star.num=0;
+</script>
+
+
+

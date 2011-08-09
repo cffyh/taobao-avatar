@@ -1,0 +1,88 @@
+{% extends "index_base.html" %}
+{% block content %}
+<script type="text/javascript" src="/site_media/js/thickbox.js"></script>
+<link rel="stylesheet" href="/site_media/css/thickbox.css">
+  <div class="content">
+    <table width="95%" border="1" align="center" cellpadding="2" cellspacing="2" class="main_table" style="border=1;margin-left:40px;">
+      <tr>
+        <th scope="col">快照名称</th>
+        <th scope="col">父快照名</th>
+        <th scope="col">使用机器数</th>
+        <th scope="col">修订次数</th>
+        <th scope="col">作者</th>
+        <th scope="col">最后修改人</th>
+        <th scope="col">最后修改时间</th>
+        <th scope="col">评价</th>
+      </tr>
+      {%  for obj in object_list  %}
+      <tr onMouseOver="this.style.backgroundColor='#FFFBAC';" onMouseOut="this.style.backgroundColor=''">
+        <td>
+        <a href="/avatar/slotedit/{{obj.fileid}}/?filename={{obj.filename}}" style="text-decoration:none" title="编辑快照文件内容">
+        {{obj.filename}}
+        </a>
+        </td>
+        <td>{{obj.parentfilename}}</td>
+        <td>
+        {% if obj.a %}
+        <a href="/avatar/onehost/{{obj.fileid}}/?keepThis=true&TB_iframe=true&height=250&width=800" style="text-decoration:none" title="详细说明" class="thickbox">
+        {{obj.a}}
+		</a>        
+        {% else %}0{% endif %}</td>
+        <td>{{obj.modifynum}}</td>
+        <td>
+         {% if obj.name %}
+        {{obj.name}}
+        {% else %}
+         --
+        {% endif %}
+        </td>
+        
+        <td>
+         {% if obj.modifypl %}
+        {{obj.modifypl}}
+        {% else %}
+         --
+        {% endif %}
+        </td>
+        
+        
+        <td>{{obj.lastmt}}</td>
+        <td><a href="/avatar/score/{{obj.fileid}}/?keepThis=true&TB_iframe=true&height=380&width=600" style="text-decoration:none" title="查看评分细则" class="thickbox">
+        {{obj.score}}
+        </a></td>
+      </tr>
+      {% endfor %}
+      <tfoot>
+      <tr><td colspan="8">
+      <div style="text-align:center;width:75%;font-size:12px;">  
+    {% if is_paginated %}   
+        {% ifequal page 1 %}   
+                 首页   
+        {% else %}    
+                <a href="?page=1">首页</a>  
+        {% endifequal %}   
+        {% if has_previous %}    
+               <a href="?page={{ previous }}">上一页</a>  
+        {% else %}    
+               上一页   
+        {% endif %}    
+        {% if has_next %}   
+               <a href="?page={{ next }}">下一页</a>  
+        {% else %}   
+               下一页   
+        {% endif %}   
+        {% ifequal page pages %}   
+                末页   
+         {% else %}   
+               <a href="?page={{ pages }}">末页</a>  
+         {% endifequal %}   
+         &nbsp;&nbsp;   
+          当前页：{{ page }}/{{ pages }}   
+         &nbsp;&nbsp;   
+         {% endif %}   
+</div>  </td></tr>
+      
+      </tfoot>
+    </table>
+  </div>
+{%endblock%}
